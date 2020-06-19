@@ -66,8 +66,7 @@ const getApiUrl = (lat, lon) => {
     const startTime = moment().toISOString()
     const endTime = moment().subtract(30, 'days').toISOString();
 
-    // return baseUrl + 'starttime=' + startTime + '&endtime=' + endTime;
-    return baseUrl + 'starttime=2020-05-01&endtime=2020-05-29';
+    return baseUrl + 'starttime=' + startTime + '&endtime=' + endTime;
 }
 
 const getEarthquakeData = (lat, lon) => {
@@ -81,22 +80,24 @@ const getEarthquakeData = (lat, lon) => {
     })
         .then(earthquakes => removeDuplicateEQ(earthquakes))
         .then(earthquakes => {
-            console.log('lengthggg', earthquakes.length)
-        earthquakes.forEach(eq => {
-            const distance = calcEQDistFromLatLon(eq, lat, lon);
+            if (earthquakes.length > 0) {
+                earthquakes.forEach(eq => {
+                    const distance = calcEQDistFromLatLon(eq, lat, lon);
             
-            printEQDetails(eq, distance);
+                    printEQDetails(eq, distance);
             
-        });
-            const shortestEQ = getEQNumOfShortDist(earthquakes, 10, lat, lon);
+                });
+                const shortestEQ = getEQNumOfShortDist(earthquakes, 10, lat, lon);
 
-            console.log('\n10 shortest distance earthquakes:\n');
-            shortestEQ.forEach(eq => {
-                const distance = calcEQDistFromLatLon(eq, lat, lon);
+                console.log('\n10 shortest distance earthquakes:\n');
+                shortestEQ.forEach(eq => {
+                    const distance = calcEQDistFromLatLon(eq, lat, lon);
 
-                printEQDetails(eq, distance);
-            });
-            
+                    printEQDetails(eq, distance);
+                });
+            }
+            else
+                console.log('no earthquakes happend');
     })
     .catch(e => console.log(e))
 }
